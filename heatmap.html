@@ -25,7 +25,7 @@
       crossorigin="anonymous"></script>
 
     <!-- include custom javascript -->
-    <script src="barchart.js"></script>
+    <script src="heatmap.js"></script>
   </head>
 
   <body>
@@ -166,7 +166,7 @@
 
   console.log("before d3.tsv() call");
 
-  d3.tsv('passengerregion.csv')
+  d3.tsv('passengerdensity.csv')
     .then(function(data) {
         // data is now whole data set
         // draw chart in here!

@@ -11,22 +11,7 @@ let dataWrangling = function(data) {
     airlines.set(val['Operating Airline'], airlines.get(val['Operating Airline']) + val['Passenger Count']);
   });
 
-  let airlineTemp = new Map([...airlines.entries()].sort((a, b) => b[1] - a[1]));
-  airlines = new Map();
-
-  // Hack to get top 30 to prevent over crowding. After spending too long
-  // either trying to cleaning the data or finding a way to pop the top couple
-  // priority queue style, I settled on a brute force approach that actually
-  // works.
-  let top = 30;
-  for (let [k, v] of airlineTemp) {
-   if (top > 0) {
-     airlines.set(k, v);
-     top--;
-   } else {
-     break;
-   }
-  }
+  airlines = new Map([...airlines.entries()].sort((a, b) => b[1] - a[1]).slice(0, 30));
 
   let series = new Map();
   data.forEach(val => {
@@ -35,8 +20,6 @@ let dataWrangling = function(data) {
        let temp = {};
        temp.name = val['Operating Airline'];
        temp.total = airlines.get(val['Operating Airline']);
-       // temp.set('name', val['Operating Airline']);
-       // temp.set('total', airlines.get(val['Operating Airline']));
        series.set(val['Operating Airline'], temp);
      }
      series.get(val['Operating Airline'])[val['GEO Region']] = val['Passenger Count'];

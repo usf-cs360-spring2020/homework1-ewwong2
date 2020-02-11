@@ -31,11 +31,6 @@ body {
 
 /* svg elements are styled differently from html elements */
 
-rect.bar {
-  stroke: none;
-  fill: #00543c;
-}
-
 #x-axis text,
 #y-axis text {
   font-size: 10pt;
