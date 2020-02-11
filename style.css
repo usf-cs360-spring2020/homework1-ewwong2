@@ -1,0 +1,59 @@
+/*
+ * we use css to style our page and our svg elements
+ * the classes/ids defined here must match our d3 code
+ */
+
+body, textarea {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 11pt;
+}
+
+body {
+  /* see https://developer.mozilla.org/en-US/docs/Web/CSS/color_value */
+  background-color: whitesmoke;
+}
+
+#bar-chart {
+  width: 950px;
+  height: 490px;
+
+  background-color: white;
+}
+
+/* svg, #bar-chart {
+  // bl.ocks.org defaults to 960px by 500px
+  width: 950px;
+  height: 490px;
+
+  background-color: white;
+} */
+
+/* svg elements are styled differently from html elements */
+
+rect.bar {
+  stroke: none;
+  fill: #00543c;
+}
+
+#x-axis text,
+#y-axis text {
+  font-size: 10pt;
+  fill: #888888;
+}
+
+#x-axis line {
+  /* tick marks */
+
+  stroke: #bbbbbb;
+  stroke-width: 1px;
+}
+
+#x-axis path,
+#y-axis path,
+#y-axis line {
+  fill: none;
+
+  stroke: #bbbbbb;
+  stroke-width: 1px;
+}

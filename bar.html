@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Bar Chart</title>
+
+    <!-- Load Bulma from CDN (consider saving it to repository instead) -->
+    <!-- https://bulma.io/ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <!-- this is our custom css stylesheet -->
+    <link href="style.css" rel="stylesheet" type="text/css">
+
+    <!-- Load Font Awesome 5 (free) icons -->
+    <script defer src="https://use.fontawesome.com/releases/v5.12.1/js/all.js"></script>
+    <!-- include d3.js v5 -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- include d3.js modules -->
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>
+
+    <!-- include custom javascript -->
+    <script src="barchart.js"></script>
+  </head>
+
+  <body>
+  <!-- Page header -->
+  <!-- https://bulma.io/documentation/layout/hero/ -->
+  <section class="hero is-dark is-bold has-text-centered">
+    <div class="hero-head">
+      <!-- Page navigation -->
+      <!-- https://bulma.io/documentation/components/navbar/ -->
+      <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+        <div class="container">
+          <div class="navbar-brand">
+            <a class="navbar-item" href="index.html">
+              <span class="icon"><i class="fas fa-home"></i></span>
+            </a>
+
+            <a role="button" class="navbar-burger burger has-text-white" aria-label="menu" aria-expanded="false" data-target="main-menu">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
+
+          <div id="main-menu" class="navbar-menu has-text-weight-medium">
+            <!-- Right navbar items -->
+            <div class="navbar-end">
+              <a class="navbar-item" href="#data" title="Data">
+                <span class="icon"><i class="fas fa-table"></i></span>
+                <span>Data</span>
+              </a>
+
+              <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                  Visualizations
+                </a>
+
+                <div class="navbar-dropdown has-background-grey-darker">
+                  <a class="navbar-item" href="/area.html">
+                    <span class="icon"><i class="fas fa-chart-area"></i></span>
+                    <span>Area Chart</span>
+                  </a>
+
+                  <a class="navbar-item is-active" href="/bar.html">
+                    <span class="icon"><i class="fas fa-chart-bar"></i></span>
+                    <span>Bar Chart</span>
+                  </a>
+                  <a class="navbar-item" href="/heatmap.html">
+                    <span class="icon"><i class="fas fa-border-all"></i></span>
+                    <span>Heat Map</span>
+                  </a>
+                </div>
+              </div>
+
+              <a class="navbar-item" href="/about.html" title="About">
+                <span class="icon"><i class="fas fa-info-circle"></i></span>
+                <span>About</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- End page navigation -->
+    </div>
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">Air Traffic Passenger Visualizations</h1>
+        <h2 class="subtitle">by Edmund Wong</h2>
+      </div>
+    </div>
+  </section>
+  <!-- End page header -->
+  <section class="section">
+    <div class="container has-text-centered">
+      <!-- Begin page content -->
+      <div class="content">
+        <h1 class="title">
+          Airline Passengers by Region
+        </h1>
+
+        <div id="warning"></div>
+        <!-- we will place our visualization in this svg using d3.js -->
+        <svg id="bar-chart"></svg>
+      </div>
+      <!-- End page content -->
+    </div>
+  </section>
+
+  <!-- Page footer -->
+  <!-- https://bulma.io/documentation/layout/footer/ -->
+  <footer class="footer">
+    <div class="content has-text-centered is-size-7">
+      <p>
+        <a href="#top">
+          <span class="fas fa-arrow-up"></span>
+          <span class="has-text-weight-medium">Back to Top</span>
+        </a>
+      </p>
+
+      <p>
+        <!-- TODO: Change to link to your Github repository -->
+        <a href="https://github.com/usf-cs360-spring2020/template-bulma" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+          <i class="fab fa-github-alt"></i>&nbsp;<strong>Github</strong>
+        </a>
+
+        <a href="https://fontawesome.com/" class="button is-small" style="padding-left: 1em; padding-right: 1em;">
+          <i class="fab fa-font-awesome"></i>&nbsp;<strong>FontAwesome</strong>
+        </a>
+
+        <a href="https://bulma.io" class="button is-small">
+          <img src="https://bulma.io/images/made-with-bulma--semiblack.png" alt="Made with Bulma" width="128" height="24">
+        </a>
+      </p>
+    </div>
+  </footer>
+  <!-- End page footer -->
+
+  <!-- Mobile menu responsiveness -->
+  <!-- https://bulma.io/documentation/components/navbar/ -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+    if ($navbarBurgers.length > 0) {
+      $navbarBurgers.forEach( el => {
+        el.addEventListener('click', () => {
+          const target = el.dataset.target;
+          const $target = document.getElementById(target);
+          el.classList.toggle('is-active');
+          $target.classList.toggle('is-active');
+        });
+      });
+    }
+  });
+  </script>
+
+  <!-- here is our core javascript -->
+  <script type="text/javascript">
+
+  console.log("before d3.tsv() call");
+
+  d3.tsv('passengerregion.csv')
+    .then(function(data) {
+        // data is now whole data set
+        // draw chart in here!
+        console.log("data loaded:");
+        console.log(data);
+
+        data.forEach(function(d) {
+          d['Passenger Count'] = +d['Passenger Count'];
+        });
+
+        drawBarChart(data);
+    })
+    .catch(function(error){
+       // handle error
+       console.log(error);
+        $('#warning').text('Unable to render chart. :(');
+    })
+
+  // this message will appear BEFORE the text is logged!
+  console.log("after d3.tsv() call");
+  </script>
+  <!-- End mobile menu responsiveness -->
+  </body>
+
+</html>
