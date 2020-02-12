@@ -45,7 +45,7 @@ let drawHeatMap = function(data) {
     top:    25,
     right:  40,
     bottom: 50, // leave space for x-axis
-    left:   230 // leave space for y-axis
+    left:   210 // leave space for y-axis
   };
 
   // now we can calculate how much space we have to plot
@@ -112,12 +112,11 @@ let drawHeatMap = function(data) {
   yGroup.call(yAxis);
   // text label for the y axis
   plot.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left + 10)
-      .attr("x", 0 - (plotHeight / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Operating Airline");
+    .attr("x", -70)
+    .attr("y", 5)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Operating Airline");
   yGroup.attr("transform", "translate(0," + 0 + ")");
 
   // Sequential color scale
@@ -155,6 +154,8 @@ let drawHeatMap = function(data) {
       // console.log(`Added bar for: ${d['Operating Airline']}`);
   });
 
+  // Sequential Legend created from following Tom MacWright's example
+  // here: https://observablehq.com/@tmcw/d3-scalesequential-continuous-color-legend-example
   svg.append("text")
     .attr("x", plotWidth + margin.left - 85)
     .attr("y", margin.top + 30)

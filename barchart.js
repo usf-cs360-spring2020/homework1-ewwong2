@@ -79,7 +79,7 @@ let drawBarChart = function(data) {
      top:    25,
      right:  20,
      bottom: 50, // leave space for x-axis
-     left:   230 // leave space for y-axis
+     left:   210 // leave space for y-axis
    };
 
   // now we can calculate how much space we have to plot
@@ -140,19 +140,20 @@ let drawBarChart = function(data) {
   yGroup.call(yAxis);
   // text label for the y axis
   plot.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left + 10)
-      .attr("x", 0 - (plotHeight / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Operating Airline");
+    .attr("x", -70)
+    .attr("y", 5)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Operating Airline");
   yGroup.attr("transform", "translate(0," + 0 + ")");
 
   let color = d3.scaleOrdinal()
-    .domain(series.map(d => d.key))
+    .domain(series.map(d => d.key).reverse())
     // .range(d3.schemeSpectral[series.length])
     .range(d3.schemeTableau10)
     .unknown("#ccc");
+
+  // console.log(series.map(d => d.key));
 
   let pairs = Array.from(series.values());
   console.log("pairs:", pairs);
@@ -189,4 +190,45 @@ let drawBarChart = function(data) {
     .append("title")
       .text(d => `${d.data.name} ${d.key}
   ${formatValue(d.data[d.key])}`);
+
+  // Legend from: https://www.d3-graph-gallery.com/graph/custom_legend.html
+
+  svg.append("rect")
+    .attr("fill", "whitesmoke")
+    .attr("stroke-width", 1)
+    .attr("stroke", "gainsboro")
+    .attr("x", 690)
+    .attr("y", 190)
+    .attr("rx", 8)
+    .attr("ry", 8)
+    .attr("width", 170)
+    .attr("height", 215);
+
+  svg.append("text")
+    .attr("x", 710)
+    .attr("y", 210)
+    .text("Geographic Region");
+
+  let size = 15
+  svg.selectAll("mydots")
+    .data(series.map(d => d.key))
+    .enter()
+    .append("rect")
+      .attr("x", 700)
+      .attr("y", function(d,i){ return 220 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
+      .attr("width", size)
+      .attr("height", size)
+      .style("fill", function(d){ return color(d)})
+
+  // Add one dot in the legend for each name.
+  svg.selectAll("mylabels")
+    .data(series.map(d => d.key))
+    .enter()
+    .append("text")
+      .attr("x", 700 + size*1.2)
+      .attr("y", function(d,i){ return 220 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
+      .style("fill", function(d){ return color(d)})
+      .text(function(d){ return d})
+      .attr("text-anchor", "left")
+      .style("alignment-baseline", "middle")
 };
