@@ -75,17 +75,26 @@ let drawBarChart = function(data) {
    * where the tick marks and axis labels will be placed
    * https://bl.ocks.org/mbostock/3019563
    */
-  let margin = {
-    top:    10,
-    right:  20,
-    bottom: 30, // leave space for x-axis
-    left:   210 // leave space for y-axis
-  };
+   let margin = {
+     top:    25,
+     right:  20,
+     bottom: 50, // leave space for x-axis
+     left:   230 // leave space for y-axis
+   };
 
   // now we can calculate how much space we have to plot
   let bounds = svg.node().getBoundingClientRect();
   let plotWidth = bounds.width - margin.right - margin.left;
   let plotHeight = bounds.height - margin.top - margin.bottom;
+
+  // Chart title from:
+  //    http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html
+  svg.append("g").append("text")
+        .attr("x", (plotWidth / 2) + margin.left)
+        .attr("y", margin.top + 10)
+        .attr("text-anchor", "middle")
+        .style("font-size", "24px")
+        .text("Airline Passengers by Region");
 
   /*
    * https://github.com/d3/d3-scale#api-reference
@@ -115,6 +124,12 @@ let drawBarChart = function(data) {
 
   let xGroup = plot.append("g").attr("id", "x-axis");
   xGroup.call(xAxis.tickFormat(d3.formatPrefix(".1", 1e6)));
+  // text label for the x axis
+  plot.append("text")
+      .attr("transform",
+            `translate(${(plotWidth/2)} ,${(plotHeight + margin.top + 15)})`)
+      .style("text-anchor", "middle")
+      .text("Passenger Count");
 
   // notice it is at the top of our svg
   // we need to translate/shift it down to the bottom
@@ -123,6 +138,14 @@ let drawBarChart = function(data) {
   // do the same for our y axix
   let yGroup = plot.append("g").attr("id", "y-axis");
   yGroup.call(yAxis);
+  // text label for the y axis
+  plot.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left + 10)
+      .attr("x", 0 - (plotHeight / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Operating Airline");
   yGroup.attr("transform", "translate(0," + 0 + ")");
 
   let color = d3.scaleOrdinal()

@@ -14,20 +14,16 @@ body {
   background-color: whitesmoke;
 }
 
-#bar-chart {
+#bar-chart, #heatmap {
   width: 950px;
   height: 490px;
 
   background-color: white;
 }
 
-/* svg, #bar-chart {
-  // bl.ocks.org defaults to 960px by 500px
-  width: 950px;
-  height: 490px;
-
-  background-color: white;
-} */
+.x-axis line, .x-axis path {
+  stroke: #fff;
+}
 
 /* svg elements are styled differently from html elements */
 

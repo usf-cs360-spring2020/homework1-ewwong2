@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Bar Chart</title>
+    <title>Heat Map</title>
 
     <!-- Load Bulma from CDN (consider saving it to repository instead) -->
     <!-- https://bulma.io/ -->
@@ -102,12 +102,12 @@
       <!-- Begin page content -->
       <div class="content">
         <h1 class="title">
-          Airline Passengers by Region
+          Passenger Count Density per Airline
         </h1>
 
         <div id="warning"></div>
         <!-- we will place our visualization in this svg using d3.js -->
-        <svg id="bar-chart"></svg>
+        <svg id="heatmap"></svg>
       </div>
       <!-- End page content -->
     </div>
@@ -177,7 +177,7 @@
           d['Passenger Count'] = +d['Passenger Count'];
         });
 
-        drawBarChart(data);
+        drawHeatMap(data);
     })
     .catch(function(error){
        // handle error
