@@ -3,16 +3,12 @@
  * the classes/ids defined here must match our d3 code
  */
 
-body, textarea {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
-  font-size: 11pt;
-}
-
-body {
-  /* see https://developer.mozilla.org/en-US/docs/Web/CSS/color_value */
-  background-color: whitesmoke;
-}
+ .footer {
+   /*
+   Hack to extend footer:
+   https://stackoverflow.com/questions/9741701/how-can-i-extend-a-footer-to-bottom-of-page */
+   box-shadow: 0 50vh 0 50vh #fafafa;
+ }
 
 #bar-chart, #heatmap {
   width: 950px;

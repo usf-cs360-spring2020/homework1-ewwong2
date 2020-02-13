@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Heat Map</title>
+    <title>Area Chart</title>
 
     <!-- Load Bulma from CDN (consider saving it to repository instead) -->
     <!-- https://bulma.io/ -->
@@ -59,7 +59,7 @@
             </a>
 
             <div class="navbar-dropdown is-boxed">
-              <a class="navbar-item" href="area.html">
+              <a class="navbar-item is-active" href="area.html">
                 <span class="icon"><i class="fas fa-chart-area"></i></span>
                 <span>Area Chart</span>
               </a>
@@ -68,7 +68,7 @@
                 <span class="icon"><i class="fas fa-chart-bar"></i></span>
                 <span>Bar Chart</span>
               </a>
-              <a class="navbar-item is-active" href="heatmap.html">
+              <a class="navbar-item" href="heatmap.html">
                 <span class="icon"><i class="fas fa-border-all"></i></span>
                 <span>Heat Map</span>
               </a>
@@ -90,10 +90,10 @@
         <div class="hero-body">
           <div class="container">
             <h1 class="title">
-              Passenger Count Density per Airline
+              Passengers by Flight Type
             </h1>
             <h2 class="subtitle">
-              HeatMap
+              Stacked Area Chart
             </h2>
           </div>
         </div>
@@ -108,29 +108,16 @@
             Created with <img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Tableau_Logo.png" style="height: 20px; padding-left: 5px;" />
           </a>
           <br/>
-          <img src="passenger density.png" style="width: 960px;"/>
-        </div>
-        <div id="d3" style="padding-top: 40px;">
-          <h2 class="title">
-            Implementation
-          </h2>
-          <a href="https://d3js.org/" class="button is-small is-rounded" style="padding: 1em;">
-            Created with <img src="https://raw.githubusercontent.com/d3/d3-logo/master/d3.png" style="height: 20px; padding-left: 5px;" />.js
-          </a>
-          <div id="warning"></div>
-          <!-- we will place our visualization in this svg using d3.js -->
-          <svg id="heatmap"></svg>
-          <p><strong>Caption:</strong> Sum of Passenger Count (color) broken down by
-            Boarding Area vs. Operating Airline.
-            <br/>Hover and wait on a data point for more details. Data Source can be found <a href="https://data.sfgov.org/Transportation/Air-Traffic-Passenger-Statistics/rkru-6vcg">here</a>
-          </p>
+          <img src="passenger by flight.png" style="width: 960px;"/>
         </div>
         <div id="encoding" style="padding-top: 40px;">
           <h2 class="title" >
             Encoding
           </h2>
-          <p>The color of the heatmap represents the passenger count for an airline and boarding area.</p>
-          <p>The continuous gradient color scale is included. Thanks to <a href="https://observablehq.com/@tmcw/d3-scalesequential-continuous-color-legend-example">Tom MacWright's color scale example</a>.</p>
+          <p>The daily average passenger count in the area chart is encoded by the length of the bar, so longer bars represent higher daily average passenger count.</p>
+          <p>The color encoding is for the flight type (GEO Summary). The blue is for domestic flights and orange is for international flights.</p>
+          <p>Note that the y-axis is the daily avergae passenger count by month. This is alleviate the issues of shorter or longer months.</p>
+          <p>Each plot is by month represents the daily average passenger count for the given month.</p>
         </div>
         <div id="wrangling" style="padding-top: 40px;">
           <h2 class="title">
@@ -140,26 +127,26 @@
             <a href="https://www.tableau.com" class="button is-small is-rounded" style="padding: 1em;">
               <img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Tableau_Logo.png" style="height: 15px;" />
             </a>.
-            The exported CSV from
+            The entire <a href="data.html">dataset</a> was passed to
             <a href="https://www.tableau.com" class="button is-small is-rounded" style="padding: 1em;">
               <img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Tableau_Logo.png" style="height: 15px;" />
-            </a> can be downloaded <a href="passengerdensity.csv">here</a>.
+            </a>.
             <br/>
-          </p>
-          <p>
-            The data was sliced to only show the top 20 airlines by total passenger count. This is done in JS for quick adjustment.
+            No additional data wrangling was done beyond
+            <a href="https://www.tableau.com" class="button is-small is-rounded" style="padding: 1em;">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Tableau_Logo.png" style="height: 15px;" />
+            </a>.
           </p>
         </div>
         <div id="conclusion" style="padding-top: 40px;">
           <h2 class="title" >
             Conclusion
           </h2>
-          <p>This heatmap shows that United Airlines primarly uses boarding area F.</p>
-          <p>They are one of the few top airlines by passenger count that use boarding area F.</p>
+          <p>From this stacked area chart is easy to multiple things:</p>
+          <p>1. There has been an upward trend in passengers daily over the 2005 to 2019 time period.</p>
+          <p>2. The amount of daily passengers each year is cyclical. Perhaps correlated to summer break for students?</p>
+          <p>3. There are significantly more domestic passengers than international ones.</p>
         </div>
-      </div>
-      <div id="acknowledgements" style="padding-top: 40px;">
-        <a href="index.html#acknowledgements"><strong>Acknowledgements</strong></a>
       </div>
       <!-- End page content -->
     </div>
@@ -219,34 +206,6 @@
       });
     }
   });
-  </script>
-
-  <!-- here is our core javascript -->
-  <script type="text/javascript">
-
-  console.log("before d3.tsv() call");
-
-  d3.tsv('passengerdensity.csv')
-    .then(function(data) {
-        // data is now whole data set
-        // draw chart in here!
-        console.log("data loaded:");
-        console.log(data);
-
-        data.forEach(function(d) {
-          d['Passenger Count'] = +d['Passenger Count'];
-        });
-
-        drawHeatMap(data);
-    })
-    .catch(function(error){
-       // handle error
-       console.log(error);
-        $('#warning').text('Unable to render chart. :(');
-    })
-
-  // this message will appear BEFORE the text is logged!
-  console.log("after d3.tsv() call");
   </script>
   <!-- End mobile menu responsiveness -->
   </body>

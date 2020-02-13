@@ -90,7 +90,7 @@ let drawBarChart = function(data) {
   // Chart title from:
   //    http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html
   svg.append("g").append("text")
-        .attr("x", (plotWidth / 2) + margin.left)
+        .attr("x", (plotWidth / 2) + margin.left - 60)
         .attr("y", margin.top + 10)
         .attr("text-anchor", "middle")
         .style("font-size", "24px")
@@ -123,11 +123,11 @@ let drawBarChart = function(data) {
   let yAxis = d3.axisLeft(airlineScale);
 
   let xGroup = plot.append("g").attr("id", "x-axis");
-  xGroup.call(xAxis.tickFormat(d3.formatPrefix(".1", 1e6)));
+  xGroup.call(xAxis.tickFormat(d3.formatPrefix(".0", 1e6)));
   // text label for the x axis
   plot.append("text")
       .attr("transform",
-            `translate(${(plotWidth/2)} ,${(plotHeight + margin.top + 15)})`)
+            `translate(${(plotWidth/2) - 40} ,${(plotHeight + margin.top + 15)})`)
       .style("text-anchor", "middle")
       .text("Passenger Count");
 

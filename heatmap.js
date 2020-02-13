@@ -56,7 +56,7 @@ let drawHeatMap = function(data) {
   // Chart title from:
   //    http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html
   svg.append("g").append("text")
-        .attr("x", (plotWidth / 2) + margin.left)
+        .attr("x", (plotWidth / 2) + margin.left - 50)
         .attr("y", margin.top)
         .attr("text-anchor", "middle")
         .style("font-size", "24px")
@@ -99,7 +99,7 @@ let drawHeatMap = function(data) {
   // text label for the x axis
   plot.append("text")
       .attr("transform",
-            `translate(${(plotWidth/2)} ,${(plotHeight + margin.top + 15)})`)
+            `translate(${(plotWidth/2 - 60)} ,${(plotHeight + margin.top + 15)})`)
       .style("text-anchor", "middle")
       .text("Boarding Area");
 
@@ -157,7 +157,7 @@ let drawHeatMap = function(data) {
   // Sequential Legend created from following Tom MacWright's example
   // here: https://observablehq.com/@tmcw/d3-scalesequential-continuous-color-legend-example
   svg.append("text")
-    .attr("x", plotWidth + margin.left - 85)
+    .attr("x", plotWidth + margin.left - 90)
     .attr("y", margin.top + 30)
     .text("Passenger Count");
 
@@ -170,6 +170,7 @@ let drawHeatMap = function(data) {
     .attr("transform", `translate(${plotWidth + margin.left - margin.right + 10}, ${margin.top + 15})`)
     .attr("height", plotHeight- margin.bottom - margin.top)
     .call(d3.axisRight(legendScale)
+      .tickFormat(d3.formatPrefix(".0", 1e6))
       .ticks(plotHeight / 70)
       .tickSize(-20));
 
